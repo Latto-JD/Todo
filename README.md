@@ -144,4 +144,11 @@ e2e/                           Playwright
 
 ## 배포
 
-Next.js 네이티브인 [Vercel](https://vercel.com) 권장. `MONGODB_URI` 환경 변수를 설정하세요.
+Next.js 네이티브인 [Vercel](https://vercel.com)에 추가 설정 없이 배포됩니다. 요약:
+
+1. Atlas → Network Access에 `0.0.0.0/0` 허용 (Vercel 서버리스는 고정 IP 없음)
+2. [vercel.com/new](https://vercel.com/new)에서 이 저장소 Import (Framework: Next.js 자동 감지)
+3. 환경 변수 설정 후 Deploy — `MONGODB_URI`, 그리고 빌드 최적화용 `MONGOMS_DISABLE_POSTINSTALL=1`
+4. `https://<프로젝트>.vercel.app/api/health` 가 `{ ok: true, db: "connected" }` 인지 확인
+
+단계별 안내: [`docs/DEPLOY.md`](docs/DEPLOY.md)
