@@ -10,6 +10,41 @@
 
 기획·설계 문서: [`docs/PRD.md`](docs/PRD.md), [`docs/PLAN.md`](docs/PLAN.md), 아키텍처: [`docs/CLAUDE.md`](docs/CLAUDE.md)
 
+## 화면
+
+| 목표 계층 (`/hierarchy`) | 칸반 보드 (`/board`) | 대시보드 (`/dashboard`) |
+|---|---|---|
+| ![목표 계층](docs/screenshots/hierarchy.jpg) | ![칸반 보드](docs/screenshots/board.jpg) | ![대시보드](docs/screenshots/dashboard.jpg) |
+| 연간→월간→주간을 한 화면에서 탐색, 각 행에 진행률 바 | Todo/Doing/Done 드래그, 상단 주간 진행률이 즉시 갱신 | 주/월/년 진행률 + 하위 항목 분해 |
+
+## 라이브 데모 (약 1분)
+
+MongoDB 연결 문자열만 있으면 바로 실행됩니다. Atlas 무료 티어(M0)를 새로 만드는 방법은
+[아래](#2-환경-변수) 참고.
+
+```bash
+git clone https://github.com/Latto-JD/Todo.git
+cd Todo
+npm install
+
+# .env.local 생성 — 본인의 MongoDB URI로 교체
+echo 'MONGODB_URI=mongodb+srv://<user>:<pass>@<cluster>.mongodb.net/todoapp' > .env.local
+
+npm run seed     # 오늘 날짜 기준 샘플 트리 삽입 (진행률까지 계산됨)
+npm run dev      # http://localhost:3000
+```
+
+`npm run seed`가 넣는 데이터는 **실행한 날짜를 기준**으로 이번 주/이번 달/올해에 걸치도록
+생성되므로, `/dashboard`를 열면 "현재 기간" 기본 선택으로 바로 데이터가 보입니다.
+위 스크린샷이 그 상태입니다.
+
+DB 없이 코드만 검증하려면:
+
+```bash
+npm test          # 91개 — 실제 DB 미접촉 (in-memory MongoDB replica set)
+npm run build     # 프로덕션 빌드
+```
+
 ## 기술 스택
 
 | 영역 | 선택 |
@@ -49,7 +84,9 @@ MONGODB_URI=mongodb+srv://<user>:<pass>@<cluster>.mongodb.net/todoapp
 npm run seed
 ```
 
-1 YearlyGoal → 2 MonthlyGoal → 4 WeeklyPlan → 12 DailyTask를 삽입합니다.
+1 YearlyGoal → 2 MonthlyGoal → 4 WeeklyPlan → 12 DailyTask를 삽입하고, 각 주간 계획에
+진행률 캐스케이드를 한 번 돌려 트리를 정합한 상태로 만듭니다. 날짜는 실행 시점 기준
+상대값(지난달 2주 + 지난주 + 이번주)이라 대시보드의 현재 기간 선택에 바로 잡힙니다.
 
 ### 4. 개발 서버
 
