@@ -4,7 +4,14 @@ import { useState, type ReactNode } from "react";
 import { ProgressBar } from "@/components/ProgressBar";
 import { ConfirmDeleteModal } from "@/components/ConfirmDeleteModal";
 import { EntityForm } from "@/components/EntityForm";
-import { ENTITY_ICON, type IconComponent } from "@/components/icons";
+import {
+  ENTITY_ICON,
+  LEVEL_ICON,
+  LEVEL_MUTED,
+  LEVEL_ROW,
+  LEVEL_ROW_SELECTED,
+  type IconComponent,
+} from "@/components/icons";
 import { useDeleteEntity } from "@/lib/queries";
 import type { AnyEntity, EntityByType, EntityType } from "@/lib/queries/types";
 
@@ -36,8 +43,8 @@ export function EntityRow<K extends EntityType>({
     <li
       className={`rounded-md border p-2 text-sm ${
         selected
-          ? "border-emerald-500 bg-emerald-50 dark:border-emerald-600 dark:bg-emerald-950/50"
-          : "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900"
+          ? `border-emerald-500 bg-emerald-50 ${LEVEL_ROW_SELECTED[type]}`
+          : `border-zinc-200 bg-white ${LEVEL_ROW[type]}`
       }`}
     >
       <div className="flex items-start justify-between gap-2">
@@ -49,15 +56,15 @@ export function EntityRow<K extends EntityType>({
         <TypeIcon
           className={`mt-0.5 size-4 shrink-0 ${
             selected
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-400 dark:text-zinc-500"
+              ? `text-emerald-600 ${LEVEL_ICON[type]}`
+              : `text-zinc-400 ${LEVEL_ICON[type]} dark:opacity-70`
           }`}
         />
         <button
           type="button"
           onClick={onSelect}
           disabled={!onSelect}
-          className="flex-1 text-left font-medium text-zinc-900 enabled:hover:underline dark:text-zinc-100"
+          className="flex-1 text-left font-medium text-zinc-900 enabled:hover:underline dark:text-amber-50"
         >
           {row.title}
         </button>
@@ -65,14 +72,14 @@ export function EntityRow<K extends EntityType>({
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="rounded px-1.5 py-0.5 text-xs text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            className={`rounded px-1.5 py-0.5 text-xs text-zinc-500 hover:bg-zinc-100 ${LEVEL_MUTED} dark:hover:bg-black/25`}
           >
             수정
           </button>
           <button
             type="button"
             onClick={() => setConfirming(true)}
-            className="rounded px-1.5 py-0.5 text-xs text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
+            className="rounded px-1.5 py-0.5 text-xs text-red-500 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/60"
           >
             삭제
           </button>
@@ -86,7 +93,7 @@ export function EntityRow<K extends EntityType>({
       )}
 
       {extra && (
-        <div className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className={`mt-1.5 text-xs text-zinc-500 ${LEVEL_MUTED}`}>
           {extra}
         </div>
       )}

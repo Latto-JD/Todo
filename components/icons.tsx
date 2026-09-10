@@ -198,3 +198,71 @@ export const STATUS_TONE: Record<Status, string> = {
   doing: "text-amber-500 dark:text-amber-400",
   done: "text-emerald-600 dark:text-emerald-400",
 };
+
+/* ------------------------------------------------------------------ *
+ * Hierarchy level surfaces (dark mode only)
+ *
+ * On a near-black page every neutral card lands on the same value, so the
+ * three goal levels were impossible to tell apart. They now sit on a warm
+ * ramp — gold at the top level, shading to orange as the span narrows — with
+ * the outer edge carrying the brighter gold so the card reads as a card.
+ * Depth is encoded twice over (warmth AND border brightness), so the ordering
+ * survives for anyone who cannot separate the two hues.
+ *
+ * Light mode is untouched: it already had enough contrast to work.
+ * DailyTask stays neutral throughout — on the board a card's colour belongs to
+ * its status, and keeping tasks cool is what sets them apart from goals.
+ * ------------------------------------------------------------------ */
+
+/** Outer card for a level — the hierarchy columns and the dashboard cards. */
+export const LEVEL_CARD: Record<EntityType, string> = {
+  "yearly-goals": "dark:border-[#e0b34d] dark:bg-[#2c2211]",
+  "monthly-goals": "dark:border-[#cb8f42] dark:bg-[#2a1c10]",
+  "weekly-plans": "dark:border-[#bd8340] dark:bg-[#26170e]",
+  "daily-tasks": "dark:border-zinc-800 dark:bg-zinc-900/60",
+};
+
+/** A row inside one of those cards — one step lighter, so it lifts off. */
+export const LEVEL_ROW: Record<EntityType, string> = {
+  "yearly-goals": "dark:border-[#9c7a30] dark:bg-[#3b2d16]",
+  "monthly-goals": "dark:border-[#8d6130] dark:bg-[#382511]",
+  "weekly-plans": "dark:border-[#734c24] dark:bg-[#322010]",
+  "daily-tasks": "dark:border-zinc-700 dark:bg-zinc-800",
+};
+
+/** Selected row: the same ramp pushed brighter rather than swapped for a
+ *  different hue, so selection reads as emphasis instead of a second system.
+ *  The ring is what carries it — two warm surfaces one step apart are too
+ *  close to separate on background alone. */
+export const LEVEL_ROW_SELECTED: Record<EntityType, string> = {
+  "yearly-goals":
+    "dark:border-[#f5cd72] dark:bg-[#54401d] dark:ring-1 dark:ring-[#f5cd72]",
+  "monthly-goals":
+    "dark:border-[#eda757] dark:bg-[#4e3418] dark:ring-1 dark:ring-[#eda757]",
+  "weekly-plans":
+    "dark:border-[#e09a4f] dark:bg-[#452c15] dark:ring-1 dark:ring-[#e09a4f]",
+  "daily-tasks": "dark:border-emerald-600 dark:bg-emerald-950/50",
+};
+
+/** Heading glyph, tinted to its level so the ramp is legible even collapsed. */
+export const LEVEL_ICON: Record<EntityType, string> = {
+  "yearly-goals": "dark:text-[#f5cd72]",
+  "monthly-goals": "dark:text-[#eda757]",
+  "weekly-plans": "dark:text-[#d38a45]",
+  "daily-tasks": "dark:text-emerald-400",
+};
+
+/** The card's own "＋ 추가" control, kept inside its level's hue. */
+export const LEVEL_BUTTON: Record<EntityType, string> = {
+  "yearly-goals":
+    "dark:border-[#9c7a30] dark:text-[#f5cd72] dark:hover:bg-[#54401d]",
+  "monthly-goals":
+    "dark:border-[#8d6130] dark:text-[#eda757] dark:hover:bg-[#4e3418]",
+  "weekly-plans":
+    "dark:border-[#734c24] dark:text-[#d38a45] dark:hover:bg-[#452c15]",
+  "daily-tasks":
+    "dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950",
+};
+
+/** Muted body text that stays legible on the warm surfaces above. */
+export const LEVEL_MUTED = "dark:text-amber-100/60";

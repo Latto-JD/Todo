@@ -2,7 +2,14 @@
 
 import { useState, type ReactNode } from "react";
 import { EntityForm } from "@/components/EntityForm";
-import { ENTITY_ICON, type IconComponent } from "@/components/icons";
+import {
+  ENTITY_ICON,
+  LEVEL_BUTTON,
+  LEVEL_CARD,
+  LEVEL_ICON,
+  LEVEL_MUTED,
+  type IconComponent,
+} from "@/components/icons";
 import { useEntityList } from "@/lib/queries";
 import {
   ENTITY_LABEL,
@@ -45,17 +52,19 @@ export function EntityColumn<K extends EntityType>({
   const TypeIcon: IconComponent = ENTITY_ICON[type];
 
   return (
-    <section className="flex min-w-0 flex-col gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/60">
+    <section
+      className={`flex min-w-0 flex-col gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 ${LEVEL_CARD[type]}`}
+    >
       <header className="flex items-center justify-between gap-2">
-        <h2 className="flex min-w-0 items-center gap-1.5 text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-          <TypeIcon className="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+        <h2 className="flex min-w-0 items-center gap-1.5 text-sm font-semibold text-zinc-800 dark:text-amber-50">
+          <TypeIcon className={`size-4 shrink-0 text-emerald-600 ${LEVEL_ICON[type]}`} />
           <span className="truncate">{title}</span>
         </h2>
         {enabled && (
           <button
             type="button"
             onClick={() => setAdding(true)}
-            className="shrink-0 rounded border border-emerald-300 px-1.5 py-0.5 text-xs font-medium text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950"
+            className={`shrink-0 rounded border border-emerald-300 px-1.5 py-0.5 text-xs font-medium text-emerald-700 hover:bg-emerald-50 ${LEVEL_BUTTON[type]}`}
           >
             ＋ 추가
           </button>
@@ -63,13 +72,13 @@ export function EntityColumn<K extends EntityType>({
       </header>
 
       {!enabled && (
-        <p className="py-6 text-center text-xs text-zinc-400 dark:text-zinc-500">
+        <p className={`py-6 text-center text-xs text-zinc-400 ${LEVEL_MUTED}`}>
           {disabledHint ?? "상위 항목을 먼저 선택하세요."}
         </p>
       )}
 
       {enabled && query.isLoading && (
-        <p className="py-4 text-center text-xs text-zinc-400 dark:text-zinc-500">
+        <p className={`py-4 text-center text-xs text-zinc-400 ${LEVEL_MUTED}`}>
           불러오는 중...
         </p>
       )}
@@ -81,7 +90,7 @@ export function EntityColumn<K extends EntityType>({
       )}
 
       {enabled && !query.isLoading && !query.isError && rows.length === 0 && (
-        <p className="py-4 text-center text-xs text-zinc-400 dark:text-zinc-500">
+        <p className={`py-4 text-center text-xs text-zinc-400 ${LEVEL_MUTED}`}>
           {ENTITY_LABEL[type]}이(가) 없습니다.
         </p>
       )}

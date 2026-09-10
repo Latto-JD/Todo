@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AddTaskButton } from "@/components/AddTaskButton";
 import { ProgressBar } from "@/components/ProgressBar";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { STATUS_ICON, IconCheckSquare } from "@/components/icons";
+import { STATUS_ICON, IconCheckSquare, LEVEL_MUTED } from "@/components/icons";
 import type { Status } from "@/lib/validation";
 import { useEntityList } from "@/lib/queries/entities";
 import type { EntityType } from "@/lib/queries/types";
@@ -55,10 +55,12 @@ const STATUS_LABEL: Record<Status, string> = {
   done: "완료",
 };
 
+// In dark mode these chips sit on the warm level cards, so the neutral one is
+// a translucent black rather than a cool zinc that would fight the surface.
 const STATUS_STYLE: Record<Status, string> = {
-  todo: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300",
-  doing: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
-  done: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
+  todo: "bg-zinc-100 text-zinc-600 dark:bg-black/35 dark:text-amber-100/75",
+  doing: "bg-amber-100 text-amber-700 dark:bg-amber-950/70 dark:text-amber-300",
+  done: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-300",
 };
 
 function asStatus(value: string): Status {
@@ -94,8 +96,8 @@ function CountPill({ status, count }: { status: Status; count: number }) {
 
 function ChildRow({ child }: { child: ChildProgress }) {
   return (
-    <li className="flex flex-col gap-1 rounded border border-zinc-100 bg-zinc-50 px-2 py-1.5 dark:border-zinc-800 dark:bg-zinc-900/60">
-      <span className="truncate text-xs font-medium text-zinc-700 dark:text-zinc-300">
+    <li className="flex flex-col gap-1 rounded border border-zinc-100 bg-zinc-50 px-2 py-1.5 dark:border-white/10 dark:bg-black/25">
+      <span className="truncate text-xs font-medium text-zinc-700 dark:text-amber-50/90">
         {child.title}
       </span>
       <ProgressBar value={child.progress} label={`${child.title} 진행률`} />
@@ -169,7 +171,7 @@ export function DashboardView() {
                 <CountPill status="todo" count={summary.todo} />
                 <CountPill status="doing" count={summary.doing} />
                 <CountPill status="done" count={summary.done} />
-                <span className="flex items-center gap-1 rounded bg-zinc-100 px-1.5 py-0.5 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+                <span className="flex items-center gap-1 rounded bg-zinc-100 px-1.5 py-0.5 text-zinc-600 dark:bg-black/35 dark:text-amber-100/75">
                   <IconCheckSquare className="size-3" />
                   전체 {summary.total}
                 </span>
@@ -180,9 +182,9 @@ export function DashboardView() {
                 {weeklyDash.data.tasks.map((t) => (
                   <li
                     key={t.id}
-                    className="flex items-center justify-between gap-2 rounded border border-zinc-100 bg-zinc-50 px-2 py-1.5 dark:border-zinc-800 dark:bg-zinc-900/60"
+                    className="flex items-center justify-between gap-2 rounded border border-zinc-100 bg-zinc-50 px-2 py-1.5 dark:border-white/10 dark:bg-black/25"
                   >
-                    <span className="truncate text-xs text-zinc-700 dark:text-zinc-300">
+                    <span className="truncate text-xs text-zinc-700 dark:text-amber-50/90">
                       {t.title}
                     </span>
                     <StatusPill status={t.status} />
@@ -191,7 +193,7 @@ export function DashboardView() {
               </ul>
             )}
             {weeklyDash.data && weeklyDash.data.tasks.length === 0 && (
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+              <p className={`text-xs text-zinc-400 ${LEVEL_MUTED}`}>
                 하위 할 일이 없습니다.
               </p>
             )}
@@ -219,7 +221,7 @@ export function DashboardView() {
               </ul>
             )}
             {monthlyDash.data && monthlyDash.data.weeklies.length === 0 && (
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+              <p className={`text-xs text-zinc-400 ${LEVEL_MUTED}`}>
                 하위 주간 계획이 없습니다.
               </p>
             )}
@@ -247,7 +249,7 @@ export function DashboardView() {
               </ul>
             )}
             {yearlyDash.data && yearlyDash.data.monthlies.length === 0 && (
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+              <p className={`text-xs text-zinc-400 ${LEVEL_MUTED}`}>
                 하위 월간 목표가 없습니다.
               </p>
             )}
@@ -287,7 +289,7 @@ export function DashboardView() {
               {unassigned.data.map((t) => (
                 <li
                   key={t.id}
-                  className="flex items-center justify-between gap-2 rounded border border-zinc-100 bg-zinc-50 px-2 py-1.5 dark:border-zinc-800 dark:bg-zinc-900/60"
+                  className="flex items-center justify-between gap-2 rounded border border-zinc-100 bg-zinc-50 px-2 py-1.5 dark:border-white/10 dark:bg-black/25"
                 >
                   <span className="truncate text-sm text-zinc-700 dark:text-zinc-300">
                     {t.title}
