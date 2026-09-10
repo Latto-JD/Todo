@@ -2,6 +2,8 @@
 
 import type { ReactNode } from "react";
 import { ProgressBar } from "@/components/ProgressBar";
+import { ENTITY_ICON } from "@/components/icons";
+import type { EntityType } from "@/lib/queries/types";
 import type { DateRange } from "../_lib/date";
 
 export interface EntityOption {
@@ -11,6 +13,8 @@ export interface EntityOption {
 
 interface PeriodCardProps {
   title: string;
+  /** Hierarchy level this card shows — picks the heading glyph. */
+  entityType: EntityType;
   range: DateRange;
   onRangeChange: (range: DateRange) => void;
   options: EntityOption[];
@@ -29,6 +33,7 @@ interface PeriodCardProps {
 
 export function PeriodCard({
   title,
+  entityType,
   range,
   onRangeChange,
   options,
@@ -41,25 +46,30 @@ export function PeriodCard({
   progress,
   children,
 }: PeriodCardProps) {
+  const Icon = ENTITY_ICON[entityType];
+
   return (
-    <section className="flex flex-col gap-3 rounded-lg border border-zinc-200 bg-white p-4">
+    <section className="flex flex-col gap-3 rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
       <header className="flex items-baseline justify-between">
-        <h2 className="text-base font-semibold text-zinc-900">{title}</h2>
+        <h2 className="flex items-center gap-1.5 text-base font-semibold text-zinc-900 dark:text-zinc-100">
+          <Icon className="size-4 text-emerald-600 dark:text-emerald-400" />
+          {title}
+        </h2>
         {progress != null && (
-          <span className="text-sm font-medium tabular-nums text-emerald-700">
+          <span className="text-sm font-medium tabular-nums text-emerald-700 dark:text-emerald-400">
             {Math.round(progress)}%
           </span>
         )}
       </header>
 
-      <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-600">
+      <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400">
         <label className="flex items-center gap-1">
           <span className="sr-only">기간 시작</span>
           <input
             type="date"
             value={range.start}
             onChange={(e) => onRangeChange({ ...range, start: e.target.value })}
-            className="rounded border border-zinc-300 px-1.5 py-1"
+            className="rounded border border-zinc-300 bg-white px-1.5 py-1 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           />
         </label>
         <span>~</span>
@@ -69,23 +79,25 @@ export function PeriodCard({
             type="date"
             value={range.end}
             onChange={(e) => onRangeChange({ ...range, end: e.target.value })}
-            className="rounded border border-zinc-300 px-1.5 py-1"
+            className="rounded border border-zinc-300 bg-white px-1.5 py-1 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           />
         </label>
       </div>
 
-      <label className="flex flex-col gap-1 text-xs text-zinc-600">
+      <label className="flex flex-col gap-1 text-xs text-zinc-600 dark:text-zinc-400">
         <span>
           대상 선택
           {picked == null && selectedId != null && (
-            <span className="ml-1 text-zinc-400">(자동 선택)</span>
+            <span className="ml-1 text-zinc-400 dark:text-zinc-500">
+              (자동 선택)
+            </span>
           )}
         </span>
         <select
           value={selectedId ?? ""}
           onChange={(e) => onPick(e.target.value || null)}
           disabled={options.length === 0}
-          className="rounded border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 disabled:bg-zinc-100"
+          className="rounded border border-zinc-300 bg-white px-2 py-1.5 text-sm text-zinc-900 disabled:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:disabled:bg-zinc-900"
         >
           {options.length === 0 && (
             <option value="">이 기간에 해당하는 항목 없음</option>
@@ -98,15 +110,23 @@ export function PeriodCard({
         </select>
       </label>
 
-      {listLoading && <p className="text-xs text-zinc-400">목록 불러오는 중...</p>}
+      {listLoading && (
+        <p className="text-xs text-zinc-400 dark:text-zinc-500">
+          목록 불러오는 중...
+        </p>
+      )}
 
       {progress != null && (
         <ProgressBar value={progress} label={`${title} 진행률`} />
       )}
 
-      {detailLoading && <p className="text-xs text-zinc-400">불러오는 중...</p>}
+      {detailLoading && (
+        <p className="text-xs text-zinc-400 dark:text-zinc-500">불러오는 중...</p>
+      )}
       {detailError && (
-        <p className="text-xs text-red-500">상세 정보를 불러오지 못했습니다.</p>
+        <p className="text-xs text-red-500 dark:text-red-400">
+          상세 정보를 불러오지 못했습니다.
+        </p>
       )}
 
       {children}

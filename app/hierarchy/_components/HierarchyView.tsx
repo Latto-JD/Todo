@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { AddTaskButton } from "@/components/AddTaskButton";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { IconCheckSquare } from "@/components/icons";
 import { useEntityList } from "@/lib/queries";
 import { EntityColumn } from "./EntityColumn";
 
@@ -10,13 +13,20 @@ function WeeklyExtra({ weeklyId }: { weeklyId: string }) {
   const total = data?.length ?? 0;
   const done = data?.filter((t) => t.status === "done").length ?? 0;
   return (
-    <span className="flex items-center gap-2">
-      <span>
-        할 일 {done}/{total}
+    <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+      <span className="flex items-center gap-1">
+        <IconCheckSquare className="size-3.5" />할 일 {done}/{total}
       </span>
+      <AddTaskButton
+        parentId={weeklyId}
+        size="sm"
+        variant="ghost"
+        label="추가"
+        testId={`add-task-weekly-${weeklyId}`}
+      />
       <Link
         href={{ pathname: "/board", query: { parent_id: weeklyId } }}
-        className="text-emerald-600 hover:underline"
+        className="text-emerald-600 hover:underline dark:text-emerald-400"
       >
         보드 열기 →
       </Link>
@@ -38,19 +48,26 @@ export function HierarchyView() {
   }
 
   return (
-    <div className="min-h-full bg-zinc-50 text-zinc-900">
+    <div className="min-h-full bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
       <div className="mx-auto max-w-6xl px-4 py-6">
-        <header className="mb-5 flex items-baseline justify-between">
+        <header className="mb-5 flex items-start justify-between gap-4">
           <div>
             <h1 className="text-xl font-bold">목표 계층</h1>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
               1년 목표 → 월간 목표 → 주간 계획 순으로 선택해 하위 항목을
               탐색하세요.
             </p>
           </div>
-          <Link href="/" className="text-sm text-emerald-600 hover:underline">
-            홈
-          </Link>
+          <div className="flex shrink-0 items-center gap-2">
+            <Link
+              href="/"
+              className="text-sm text-emerald-600 hover:underline dark:text-emerald-400"
+            >
+              홈
+            </Link>
+            <AddTaskButton />
+            <ThemeToggle />
+          </div>
         </header>
 
         <div className="grid gap-4 lg:grid-cols-3">

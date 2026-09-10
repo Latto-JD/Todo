@@ -62,9 +62,11 @@ export function useToasts(): ToastItem[] {
 }
 
 const KIND_STYLES: Record<ToastKind, string> = {
-  success: "border-emerald-300 bg-emerald-50 text-emerald-900",
-  error: "border-red-300 bg-red-50 text-red-900",
-  info: "border-zinc-300 bg-white text-zinc-900",
+  success:
+    "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100",
+  error:
+    "border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950 dark:text-red-100",
+  info: "border-zinc-300 bg-white text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100",
 };
 
 export function Toaster() {

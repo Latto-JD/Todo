@@ -1,13 +1,30 @@
 @import "tailwindcss";
 
 /*
- * The app is designed for a single light theme (neutral zinc surfaces). The
- * body background matches the pages' `bg-zinc-50` so any area a short page does
- * not cover still reads as part of the app rather than a dark gap.
+ * Class-based dark mode (Tailwind v4). `dark:` resolves against a `.dark` class
+ * on <html>, which `components/ThemeToggle.tsx` flips and the inline script in
+ * `app/layout.tsx` sets before first paint so the theme never flashes.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * The body background matches the pages' own surface colour so any area a short
+ * page does not cover still reads as part of the app rather than a gap.
+ *
+ * `color-scheme` is what makes the *native* controls follow the theme — this app
+ * is full of `<input type="date">` and `<select>`, and without it their pickers,
+ * calendar glyphs, and the scrollbars stay light on a dark page.
  */
 :root {
   --background: #fafafa;
   --foreground: #18181b;
+  color-scheme: light;
+}
+
+:root.dark {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  color-scheme: dark;
 }
 
 @theme inline {
